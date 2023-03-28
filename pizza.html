@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Pizza Builder</title>
+    <style>
+      #pizza {
+        width: 300px;
+        height: 300px;
+        border: 2px dashed #ccc;
+        border-radius: 50%;
+        margin: 20px auto;
+        position: relative;
+      }
+
+      .ingredient {
+        display: inline-block;
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+        border: 2px solid #ccc;
+        border-radius: 50%;
+        background-repeat: no-repeat;
+        background-size: contain;
+        cursor: pointer;
+      }
+
+      #regular-crust {
+        background-image: url('img/regular-crust.png');
+      }
+
+      #thin-crust {
+        background-image: url('img/thin-crust.png');
+      }
+
+      #mushrooms {
+        background-image: url('img/mushrooms.png');
+      }
+
+      #peppers {
+        background-image: url('img/peppers.png');
+      }
+
+      #olives {
+        background-image: url('img/olives.png');
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Pizza Builder</h1>
+    <div id="pizza"></div>
+    <h2>Select a pizza base:</h2>
+    <div id="base-options">
+      <div class="ingredient" id="regular-crust"></div>
+      <div class="ingredient" id="thin-crust"></div>
+    </div>
+    <h2>Select ingredients:</h2>
+    <div id="ingredient-options">
+      <div class="ingredient" id="mushrooms"></div>
+      <div class="ingredient" id="peppers"></div>
+      <div class="ingredient" id="olives"></div>
+    </div>
+    <h2>Selected ingredients:</h2>
+    <ul id="selected-ingredients"></ul>
+    <script>
+      const pizza = document.querySelector('#pizza');
+      const baseOptions = document.querySelectorAll('#base-options .ingredient');
+      const ingredientOptions = document.querySelectorAll('#ingredient-options .ingredient');
+      const selectedIngredients = document.querySelector('#selected-ingredients');
+
+      let selectedBase = null;
+      let selectedIngredientsArray = [];
+
+      function handleDrop(e) {
+        e.preventDefault();
+        const ingredientId = e.dataTransfer.getData('text/plain');
+        const ingredient = document.querySelector(`#${ingredientId}`);
+
+        if (ingredient.parentNode.id === 'ingredient-options') {
+          const newIngredient = document.createElement('li');
+          newIngredient.innerText = ingredientId;
+          selectedIngredientsArray.push(ingredientId);
+          selectedIngredients.appendChild(newIngredient);
+        }
+
+        pizza.style.backgroundImage += `, url(${ingredient.style.backgroundImage.slice(5, -2)})`;
+      }
+
+      function handleDragOver(e) {
+        e.preventDefault();
+      }
+
+      function handleDragStart(e) {
+        e.dataTransfer.setData('text/plain', e.target.id);
+      }
+
+      function handleBaseSelect(e) {
+        selectedBase = e.target.id;
+        pizza.style.backgroundImage = `url(${e.target.style.backgroundImage.slice(5, -2)})`;
+      }
+
+      baseOptions.forEach(option => {
+        option.addEventListener('click', handleBaseSelect);
+        option.addEventListener('dragstart', handleDragStart);
+      });
+
+      ingredientOptions.forEach(option => {
+        option.addEventListener('dragstart', handleDragStart);
+      });
+
+      pizza.addEventListener('drop', handleDrop);
+      pizza.addEventListener('dragover', handleDragOver);
+    </script
+
+</html>
