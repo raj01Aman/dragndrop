@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Pizza Design Web App</title>
+    <style>
+      .pizza-container {
+        width: 500px;
+        height: 500px;
+        border-radius: 50%;
+        border: 5px solid #ccc;
+        margin: 0 auto;
+        position: relative;
+      }
+      .pizza-base {
+        width: 80%;
+        height: 80%;
+        background-color: #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 10%;
+        left: 10%;
+      }
+      .pizza-base-options {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+      .pizza-base-option {
+        width: 45%;
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 5px;
+        text-align: center;
+        cursor: move;
+      }
+      .pizza-base-option:hover {
+        background-color: #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="pizza-container">
+      <div class="pizza-base"></div>
+    </div>
+    <div class="pizza-base-options">
+      <div class="pizza-base-option" draggable="true" ondragstart="dragStart(event)" id="regular-base">Regular</div>
+      <div class="pizza-base-option" draggable="true" ondragstart="dragStart(event)" id="thin-crust-base">Thin Crust</div>
+    </div>
+    <script>
+      function dragStart(event) {
+        event.dataTransfer.setData("text/plain", event.target.id);
+      }
+      var pizzaBase = document.querySelector(".pizza-base");
+      pizzaBase.addEventListener("dragover", dragOver);
+      pizzaBase.addEventListener("drop", drop);
+      function dragOver(event) {
+        event.preventDefault();
+      }
+      function drop(event) {
+        event.preventDefault();
+        var data = event.dataTransfer.getData("text");
+        var pizzaBaseOption = document.getElementById(data);
+        pizzaBaseOption.parentNode.removeChild(pizzaBaseOption);
+        pizzaBaseOption.style.position = "static";
+        pizzaBase.appendChild(pizzaBaseOption);
+      }
+    </script>
+  </body>
+</html>
